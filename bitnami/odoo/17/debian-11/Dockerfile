@@ -19,6 +19,9 @@ ENV OS_ARCH="${TARGETARCH:-amd64}" \
     OS_FLAVOUR="debian-11" \
     OS_NAME="linux"
 
+# Define addons dir as env. Scripts will put it later to the odoo config file. 
+ENV ODOO_ADDONS_DIR="/opt/bitnami/odoo/addons"
+
 COPY prebuildfs /
 SHELL ["/bin/bash", "-o", "errexit", "-o", "nounset", "-o", "pipefail", "-c"]
 # Install required system packages and dependencies
@@ -51,6 +54,33 @@ RUN curl -sLO "https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6
     fi && \
     dpkg -i "wkhtmltox_0.12.6.1-3.bullseye_${OS_ARCH}.deb" && \
     rm wkhtmltox_0.12.6.1-3.bullseye_${OS_ARCH}.deb
+
+# Prepare to install custom Odoo modules
+ENV MODULES_REPO_SSH_KEY="PUT_GITHUB_KEY" \
+    MODULES_REPO_BRANCH="PUT_BRANCH_NAME" \
+    MODULES_REPO_URL="PUT_REPO_URL" \
+    SSH_PATH="/root/.ssh"
+
+RUN apt-get update --yes && apt-get install git --yes && apt-get install ssh --yes
+
+RUN mkdir $SSH_PATH && \
+    echo "-----BEGIN OPENSSH PRIVATE KEY-----" >> $SSH_PATH/github && \
+    echo $MODULES_REPO_SSH_KEY >> $SSH_PATH/github && \
+    echo "-----END OPENSSH PRIVATE KEY-----" >> $SSH_PATH/github && \
+    chmod 600 $SSH_PATH/github && \
+    eval $(ssh-agent -s) && ssh-add $SSH_PATH/github && \
+    echo "PUT_HOST_ID_HERE" >> ~/.ssh/known_hosts
+
+RUN cat $SSH_PATH/github
+
+# Change host if needed
+RUN echo "Host github.com" >> $SSH_PATH/config && \
+    echo " HostName github.com" >> $SSH_PATH/config && \
+    echo " IdentityFile ~/.ssh/github" >> $SSH_PATH/config && \
+    chmod 644 $SSH_PATH/config
+
+# Install custom Odoo modules
+RUN git clone -b $MODULES_REPO_BRANCH $MODULES_REPO_URL $ODOO_ADDONS_DIR --depth 1
 
 COPY rootfs /
 RUN /opt/bitnami/scripts/odoo/postunpack.sh
