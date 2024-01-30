@@ -70,7 +70,7 @@ RUN mkdir $SSH_PATH && \
     echo "-----END OPENSSH PRIVATE KEY-----" >> $SSH_PATH/github && \
     chmod 600 $SSH_PATH/github && \
     eval $(ssh-agent -s) && ssh-add $SSH_PATH/github && \
-    echo $SSH_KNOWN_HOST_ID >> ~/.ssh/known_hosts
+    echo $SSH_KNOWN_HOST_ID >> $SSH_PATH/known_hosts
 
 RUN cat $SSH_PATH/github
 
