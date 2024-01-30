@@ -59,6 +59,7 @@ RUN curl -sLO "https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6
 ENV MODULES_REPO_SSH_KEY="PUT_GITHUB_KEY" \
     MODULES_REPO_BRANCH="PUT_BRANCH_NAME" \
     MODULES_REPO_URL="PUT_REPO_URL" \
+    SSH_KNOWN_HOST_ID="PUT_HOST_ID_HERE" \
     SSH_PATH="/root/.ssh"
 
 RUN apt-get update --yes && apt-get install git --yes && apt-get install ssh --yes
@@ -69,7 +70,7 @@ RUN mkdir $SSH_PATH && \
     echo "-----END OPENSSH PRIVATE KEY-----" >> $SSH_PATH/github && \
     chmod 600 $SSH_PATH/github && \
     eval $(ssh-agent -s) && ssh-add $SSH_PATH/github && \
-    echo "PUT_HOST_ID_HERE" >> ~/.ssh/known_hosts
+    echo $SSH_KNOWN_HOST_ID >> ~/.ssh/known_hosts
 
 RUN cat $SSH_PATH/github
 
