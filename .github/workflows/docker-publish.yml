@@ -40,29 +40,30 @@ jobs:
         run: |
           echo ${{ vars.MODULES_REPO_BRANCH }}
           echo "${{ secrets.EXAMPLE_SECRET }}"
-          
 
+      - name: Clone Github Repo Action
+        # You may pin to the exact commit or the version.
+        # uses: GuillaumeFalourd/clone-github-repo-action@19817562c346ff60f9935158dede6c5ece8fd0ac
+        # https://github.com/marketplace/actions/clone-github-repo-action
+        uses: GuillaumeFalourd/clone-github-repo-action@v2.3
+        with:
+          # Repository Owner
+          owner: kajedot
+          # Repository name
+          repository: prv-tst
+          # PAT with repository scope (https://github.com/settings/tokens)
+          access-token: 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
+          # Depth of the clone (default: full history)
+          depth: 1
+          # Branch name (default: main)
+          branch: main
+          # Clone with submodules
+          submodule: false
+          
       - name: Get Odoo modules
         run: |
-          SSH_PATH="~/.ssh"
-          ODOO_ADDONS_DIR="~/odoo-addons"
-          
-          echo "-----BEGIN OPENSSH PRIVATE KEY-----" >> $SSH_PATH/github
-          echo ${{ secrets.EXAMPLE_SECRET }} >> $SSH_PATH/github
-          echo "-----END OPENSSH PRIVATE KEY-----" >> $SSH_PATH/github
-          echo "$SSH_PATH/github"
-          chmod 600 $SSH_PATH/github
-          eval $(ssh-agent -s) && ssh-add $SSH_PATH/github
-          echo "${{ secrets.SSH_KNOWN_HOST_ID }}" >> $SSH_PATH/known_hosts
-
-          echo "Host github.com" >> $SSH_PATH/config
-          echo " HostName github.com" >> $SSH_PATH/config
-          echo " IdentityFile ~/.ssh/github" >> $SSH_PATH/config
-          chmod 644 $SSH_PATH/config
-
-          git clone -b ${{ vars.MODULES_REPO_BRANCH }} ${{ vars.MODULES_REPO_URL }} $ODOO_ADDONS_DIR --depth 1
-
-          ls -l $ODOO_ADDONS_DIR
+          cd prv-tst
+          ls -la
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
