@@ -39,7 +39,7 @@ jobs:
       - name: Check variables
         run: |
           echo ${{ vars.MODULES_REPO_BRANCH }}
-          echo ${{ secrets.EXAMPLE_SECRET }}
+          echo "${{ secrets.EXAMPLE_SECRET }}"
           
 
       - name: Get Odoo modules
