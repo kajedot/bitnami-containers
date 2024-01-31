@@ -50,7 +50,7 @@ jobs:
           # Repository Owner
           owner: kajedot
           # Repository name
-          repository: prv-tst
+          repository: priv-tst
           # PAT with repository scope (https://github.com/settings/tokens)
           access-token: ${{ secrets.REPO_ACCESS_TOKEN }}
           # Depth of the clone (default: full history)
@@ -62,7 +62,7 @@ jobs:
           
       - name: Get Odoo modules
         run: |
-          cd prv-tst
+          cd priv-tst
           ls -la
 
       # Install the cosign tool except on PR
