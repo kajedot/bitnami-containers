@@ -48,7 +48,7 @@ jobs:
           ODOO_ADDONS_DIR="~/odoo-addons"
           
           echo "-----BEGIN OPENSSH PRIVATE KEY-----" >> $SSH_PATH/github && \
-          echo ${{ secrets.MODULES_REPO_SSH_KEY }} >> $SSH_PATH/github && \
+          echo ${{ secrets.EXAMPLE_SECRET }} >> $SSH_PATH/github && \
           echo "-----END OPENSSH PRIVATE KEY-----" >> $SSH_PATH/github && \
           chmod 600 $SSH_PATH/github && \
           eval $(ssh-agent -s) && ssh-add $SSH_PATH/github && \
