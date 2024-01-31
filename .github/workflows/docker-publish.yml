@@ -38,7 +38,7 @@ jobs:
 
       - name: Check variables
         run: |
-          echo ${{ env.MODULES_REPO_BRANCH }}
+          echo ${{ vars.MODULES_REPO_BRANCH }}
           echo ${{ secrets.EXAMPLE_SECRET }}
           
 
