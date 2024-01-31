@@ -52,7 +52,7 @@ jobs:
           echo "-----END OPENSSH PRIVATE KEY-----" >> $SSH_PATH/github && \
           chmod 600 $SSH_PATH/github && \
           eval $(ssh-agent -s) && ssh-add $SSH_PATH/github && \
-          echo ${{ secrets.SSH_KNOWN_HOST_ID }} >> $SSH_PATH/known_hosts
+          echo "${{ secrets.SSH_KNOWN_HOST_ID }}" >> $SSH_PATH/known_hosts
 
           echo "Host github.com" >> $SSH_PATH/config && \
           echo " HostName github.com" >> $SSH_PATH/config && \
