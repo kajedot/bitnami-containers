@@ -52,7 +52,7 @@ jobs:
           # Repository name
           repository: prv-tst
           # PAT with repository scope (https://github.com/settings/tokens)
-          access-token: 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
+          access-token: ${{ secrets.REPO_ACCESS_TOKEN }}
           # Depth of the clone (default: full history)
           depth: 1
           # Branch name (default: main)
