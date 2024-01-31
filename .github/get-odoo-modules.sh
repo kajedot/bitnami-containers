@@ -15,3 +15,5 @@ echo " IdentityFile ~/.ssh/github" >> $SSH_PATH/config && \
 chmod 644 $SSH_PATH/config
 
 git clone -b ${{ env.MODULES_REPO_BRANCH }} ${{ env.MODULES_REPO_URL }} ${{ env.ODOO_ADDONS_DIR }} --depth 1
+
+ls -l ${{ env.ODOO_ADDONS_DIR }}
