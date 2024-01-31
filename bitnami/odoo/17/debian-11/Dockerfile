@@ -62,26 +62,7 @@ ENV MODULES_REPO_SSH_KEY="PUT_GITHUB_KEY" \
     SSH_KNOWN_HOST_ID="PUT_HOST_ID_HERE" \
     SSH_PATH="/root/.ssh"
 
-RUN apt-get update --yes && apt-get install git --yes && apt-get install ssh --yes
-
-RUN mkdir $SSH_PATH && \
-    echo "-----BEGIN OPENSSH PRIVATE KEY-----" >> $SSH_PATH/github && \
-    echo $MODULES_REPO_SSH_KEY >> $SSH_PATH/github && \
-    echo "-----END OPENSSH PRIVATE KEY-----" >> $SSH_PATH/github && \
-    chmod 600 $SSH_PATH/github && \
-    eval $(ssh-agent -s) && ssh-add $SSH_PATH/github && \
-    echo $SSH_KNOWN_HOST_ID >> $SSH_PATH/known_hosts
-
-RUN cat $SSH_PATH/github
-
-# Change host if needed
-RUN echo "Host github.com" >> $SSH_PATH/config && \
-    echo " HostName github.com" >> $SSH_PATH/config && \
-    echo " IdentityFile ~/.ssh/github" >> $SSH_PATH/config && \
-    chmod 644 $SSH_PATH/config
-
-# Install custom Odoo modules
-RUN git clone -b $MODULES_REPO_BRANCH $MODULES_REPO_URL $ODOO_ADDONS_DIR --depth 1
+# RUN apt-get update --yes && apt-get install git --yes && apt-get install ssh --yes
 
 COPY rootfs /
 RUN /opt/bitnami/scripts/odoo/postunpack.sh
